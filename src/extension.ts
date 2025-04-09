@@ -49,9 +49,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 			vscode.commands.executeCommand('editor.foldAll');
 		} else {
 			selections.forEach(selection => {
-				for (let line = selection.start.line; line <= selection.end.line; line++) {
-					vscode.commands.executeCommand('editor.fold', { levels: 1, direction: 'up', selectionLines: [line] });
-				}
+				vscode.commands.executeCommand('editor.fold', { levels: 1, direction: 'up', selectionLines: [selection.start.line] });
 			});
 		}
 	});
