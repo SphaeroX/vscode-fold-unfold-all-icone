@@ -19,18 +19,22 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	subscriptions.push(unfoldStatusBarItem);
 	unfoldStatusBarItem.show();
 
-	// Command 'extension.unfoldSelected' registrieren
 	const unfoldSelectedDisposable = vscode.commands.registerCommand('extension.unfoldSelected', () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			return;
 		}
 		const selections = editor.selections;
-		selections.forEach(selection => {
-			for (let line = selection.start.line; line <= selection.end.line; line++) {
-				vscode.commands.executeCommand('editor.unfold', { levels: 1, direction: 'up', selectionLines: [line] });
-			}
-		});
+		const onlyCursors = selections.every(sel => sel.isEmpty);
+		if (onlyCursors) {
+			vscode.commands.executeCommand('editor.unfoldAll');
+		} else {
+			selections.forEach(selection => {
+				for (let line = selection.start.line; line <= selection.end.line; line++) {
+					vscode.commands.executeCommand('editor.unfold', { levels: 1, direction: 'up', selectionLines: [line] });
+				}
+			});
+		}
 	});
 	subscriptions.push(unfoldSelectedDisposable);
 
@@ -40,11 +44,16 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 			return;
 		}
 		const selections = editor.selections;
-		selections.forEach(selection => {
-			for (let line = selection.start.line; line <= selection.end.line; line++) {
-				vscode.commands.executeCommand('editor.fold', { levels: 1, direction: 'up', selectionLines: [line] });
-			}
-		});
+		const onlyCursors = selections.every(sel => sel.isEmpty);
+		if (onlyCursors) {
+			vscode.commands.executeCommand('editor.foldAll');
+		} else {
+			selections.forEach(selection => {
+				for (let line = selection.start.line; line <= selection.end.line; line++) {
+					vscode.commands.executeCommand('editor.fold', { levels: 1, direction: 'up', selectionLines: [line] });
+				}
+			});
+		}
 	});
 	subscriptions.push(foldSelectedDisposable);
 }

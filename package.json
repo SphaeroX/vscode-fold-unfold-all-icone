@@ -2,7 +2,7 @@
 	"name": "fold-unfold-all-icone",
 	"displayName": "Fold/unfold all icone",
 	"description": "Add a fold and unfold all / slected status bar's icone ",
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"publisher": "FerrierBenjamin",
 	"repository": {
 		"type": "git",
